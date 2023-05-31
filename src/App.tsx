@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { SelectedPage } from "./shared/types";
 import Navbar from "./pages/navbar";
 import Home from "./pages/home";
+import Plan from "./pages/plan";
+import Service from "./pages/service";
+import Footer from "./pages/footer";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(
@@ -28,7 +32,11 @@ function App() {
         setSelectedPage={setSelectedPage}
         isTopOfPage={isTopOfPage}
       />
+      <Plan />
       <Home />
+      <Service />
+      <Footer />
+      <Toaster position="bottom-center" />
     </div>
   );
 }
