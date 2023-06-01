@@ -1,10 +1,10 @@
-import axios from "axios";
 import { motion } from "framer-motion";
 import { petInfos } from "../../data/data.ts";
 import PetCard from "../../components/PetCard.tsx";
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { PetInfoType, SelectedPage } from "../../shared/types.ts";
+import Dropdown from "../../components/Dropdown.tsx";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -12,19 +12,7 @@ type Props = {
 
 const Home = ({ setSelectedPage }: Props) => {
   const [imageUrl, setImageUrl] = useState("");
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://dog.ceo/api/breeds/image/random");
-        const pics = await response.json();
-        setImageUrl(pics.message);
-        console.log(pics);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchData();
-  }, []);
+
   return (
     <div className="mx-auto bg-rose-200 p-5">
       <div className="mx-24 mt-8 flex items-center justify-between">
@@ -32,28 +20,31 @@ const Home = ({ setSelectedPage }: Props) => {
           onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
+          viewport={{ once: true, amount: "some" }}
           transition={{ duration: 0.3 }}
           variants={{
             hidden: { opacity: 0, x: -100 },
             visible: { opacity: 1, x: 0 },
           }}
-          className="flex items-center justify-center "
+          className="flex items-center justify-between "
         >
-          <h1 className="font-Fatface text-3xl font-bold">
-            Find your lovely cat
-          </h1>
-          <button className="ml-4 mr-4 rounded-[18px] border border-black p-1 text-sm">
-            {petInfos.length * 100}
-          </button>
+          <div className="flex items-center justify-center">
+            <h1 className="font-Fatface text-3xl font-bold">
+              Find your lovely cat
+            </h1>
+            <button className="ml-4 mr-4 rounded-[18px] border border-black p-1 text-sm">
+              {petInfos.length * 100}
+            </button>
+          </div>
+          <Dropdown />
         </motion.div>
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: true, amount: "some" }}
+          transition={{ duration: 0.3 }}
           variants={{
-            hidden: { opacity: 0, x: 100 },
+            hidden: { opacity: 0, x: 50 },
             visible: { opacity: 1, x: 0 },
           }}
           className="flex"

@@ -4,7 +4,7 @@ export enum SelectedPage {
 }
 
 export enum DogSpecies {
-  Golden = "golden retriever",
+  Golden = "retriever",
   Beagle = "beagle",
   BullDog = "bullDog",
   Pug = "pug",
@@ -31,3 +31,9 @@ export type PetInfoType = {
   isTrained?: boolean;
   tags?: { tag: string; id: string }[];
 };
+
+/*
+bali Siamese
+bslo British Longhair
+esho 
+*/

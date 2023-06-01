@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { CatSpecies, DogSpecies } from "../shared/types";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import useMediaQuery from "../hooks/useMediaQuery";
 type Props = {
   infos: PetInfoType;
 };
@@ -15,21 +16,40 @@ type Props = {
 const PetCard = ({ infos }: Props) => {
   const [save, setSave] = useState(false);
   const [dogImageUrl, setDogImageUrl] = useState("");
+  const [catImageUrl, setCatImageUrl] = useState("");
+  const isUnderMediumScreens = useMediaQuery("(max-width: 1060px)");
+  const isAboveSmallScreens = useMediaQuery("(min-width: 770px)");
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDog = async () => {
       try {
         const response = await fetch(
           `https://dog.ceo/api/breed/${infos.species.toLowerCase()}/images/random`
         );
         const pics = await response.json();
         setDogImageUrl(pics.message);
-        console.log(pics);
       } catch (err) {
         console.error(err);
       }
     };
-    fetchData();
+
+    const fetchCat = async () => {
+      try {
+        const response = await fetch(
+          `https://api.thecatapi.com/v1/images/search?breed_ids=beng&api_key=REPLACE_ME`
+        );
+        const pics = await response.json();
+        setCatImageUrl(pics[0].url);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    {
+      infos.type === "Dog" ? fetchDog() : fetchCat();
+    }
   }, []);
+  if (isUnderMediumScreens && isAboveSmallScreens)
+    console.log("fooooooooooooooooooooooooooo");
   return (
     <motion.div
       initial="hidden"
@@ -44,7 +64,7 @@ const PetCard = ({ infos }: Props) => {
     >
       <div
         className={clsx(
-          `hover:scale-120 bg-read-200 flex flex-col justify-between rounded-[18px] lg:min-h-[280px]`,
+          `hover:scale-120 bg-read-200  flex flex-col justify-between rounded-[18px] md:min-h-[450px]`,
           {
             // dog
             "bg-rose-200": infos.species === DogSpecies.Samoyed,
@@ -85,7 +105,7 @@ const PetCard = ({ infos }: Props) => {
         </div>
         <div className="relative mx-3 my-2 h-[300px] overflow-hidden rounded-3xl md:max-h-[220px] md:max-w-[330px] lg:max-h-[180px]">
           <img
-            src={dogImageUrl}
+            src={infos.type === "Dog" ? `${dogImageUrl}` : `${catImageUrl}`}
             alt=""
             className="mx-auto w-full max-w-full duration-300 ease-in-out hover:scale-110"
           />
@@ -96,7 +116,11 @@ const PetCard = ({ infos }: Props) => {
               <p>{infos.isHealthy ? "Healthy!💪🏻" : "not that weak😾"}</p>
               {/* <HText>{isTrained ? "Trained!!" : "not trained yet🥹"}</HText> */}
               <h1 className="font-R font-Raleway text-5xl font-bold">
-                {infos.species}
+                {isUnderMediumScreens && isAboveSmallScreens
+                  ? infos.species.length <= 10
+                    ? infos.species
+                    : infos.species.slice(0, 11) + "..."
+                  : infos.species}
               </h1>
             </div>
             <img
